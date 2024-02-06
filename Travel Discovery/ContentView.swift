@@ -67,8 +67,19 @@ struct DiscoverCategoriesView: View {
         }
     }
 }
+struct Destination: Hashable {
+    let name, country, imageName: String
+}
 
 struct PopularDestinationsView: View {
+    @Environment(\.colorScheme) var colorScheme
+    
+    let destinations: [Destination] = [
+        .init(name: "Paris", country: "France", imageName: "eiffel_tower"),
+        .init(name: "Tokyo", country: "Japan", imageName: "japan"),
+        .init(name: "New York", country: "USA", imageName: "new_york"),
+    ]
+    
     var body: some View {
         VStack {
             HStack {
@@ -82,13 +93,30 @@ struct PopularDestinationsView: View {
             
             ScrollView(.horizontal) {
                 HStack(spacing: 8, content: {
-                    ForEach(0...5, id: \.self) { _ in
-                        Spacer()
-                            .frame(width: 125, height: 150)
-                            .background(.gray)
-                            .cornerRadius(5)
-                            .shadow(color: .gray, radius: 4, x: 0.0, y: 2.0)
-                            .padding(.bottom)
+                    ForEach(destinations, id: \.self) { destination in
+                        VStack(alignment: .leading, spacing: 0) {
+                            Image(destination.imageName)
+                                .resizable()
+                                .frame(width: 125, height: 125)
+                                .scaledToFill()
+                                .cornerRadius(4.0)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 6)
+                            
+                            Text(destination.name)
+                                .font(.system(size: 12, weight: .semibold))
+                                .padding(.horizontal, 6)
+                            
+                            Text(destination.country)
+                                .font(.system(size: 12, weight: .semibold))
+                                .padding(.horizontal, 6)
+                                .padding(.bottom, 8)
+                                .foregroundColor(.secondary)
+                        }
+                        .background(Color.init( white: colorScheme == .dark ? 0.45 : 0.85, opacity: 1))
+                        .cornerRadius(5)
+                        .shadow(color: .gray, radius: 2.5, x: 0.0, y: 2.0)
+                        .padding(.bottom)
                     }
                     
                 })
