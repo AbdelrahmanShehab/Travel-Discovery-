@@ -126,7 +126,19 @@ struct PopularDestinationsView: View {
     }
 }
 
+struct Restaurant: Hashable {
+    let name, imageName: String
+}
+
 struct PopularRestaurantsView: View {
+    
+    let restaurants: [Restaurant] = [
+        .init(name: "Japan's Finest Tapas", imageName: "tapas"),
+        .init(name: "Bar & Grill", imageName: "bar_grill"),
+    ]
+    
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
         VStack {
             HStack {
@@ -139,14 +151,47 @@ struct PopularRestaurantsView: View {
             .padding()
             
             ScrollView(.horizontal) {
-                HStack(spacing: 8, content: {
-                    ForEach(0...5, id: \.self) { _ in
-                        Spacer()
-                            .frame(width: 200, height: 64)
-                            .background(.gray)
-                            .cornerRadius(5)
-                            .shadow(color: .gray, radius: 4, x: 0.0, y: 2.0)
-                            .padding(.bottom)
+                HStack(spacing: 8.0, content: {
+                    ForEach(restaurants, id: \.self) { restaurant in
+                        HStack(spacing: 8, content: {
+                            Image(restaurant.imageName)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 60, height: 60)
+                                .clipped()
+                                .cornerRadius(5.0)
+                                .padding([.horizontal, .vertical], 6)
+                            
+                            VStack(alignment: .leading, spacing: 6) {
+                                
+                                HStack {
+                                    Text(restaurant.name)
+                                    Spacer()
+                                    Button {
+                                        // ACTION CODE
+                                    } label: {
+                                        Image(systemName: "ellipsis")
+                                            .foregroundStyle(.gray)
+                                    }
+                                    
+                                }
+                                .padding(.trailing, 6)
+                                
+                                HStack {
+                                    Image(systemName: "star.fill")
+                                    Text("4.7 • Sushi • $$")
+                                }
+                                
+                                Text("Tokyo, Japan")
+                            }
+                            .font(.system(size: 12, weight: .semibold, design: .default))
+                            
+                        })
+                        .frame(width: 240)
+                        .background(Color.init( white: colorScheme == .dark ? 0.45 : 0.85, opacity: 1))
+                        .cornerRadius(5)
+                        .shadow(color: .gray, radius: 2.5, x: 0.0, y: 2.0)
+                        .padding(.bottom)
                     }
                     
                 })
